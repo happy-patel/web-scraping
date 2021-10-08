@@ -2,7 +2,7 @@ const request = require('request');
 const cheerio = require('cheerio');
 const url = 'https://www.espncricinfo.com/series/ipl-2020-21-1210595/chennai-super-kings-vs-kings-xi-punjab-53rd-match-1216506/full-scorecard';
 
-const highestWicketTacker = (req, response) => {
+const highestWicketTaker = (req, response) => {
 
   request(url, async (err, res, html) => {
     if (err) {
@@ -68,4 +68,4 @@ const highestWicketTacker = (req, response) => {
   }
 }
 
-module.exports = highestWicketTacker;
+module.exports = highestWicketTaker;
