@@ -67,7 +67,7 @@ const matchStats = async (req, response) => {
     innings.each((i, inning) => {
 
       // Find batman table and get all the rows from batsman table
-      let allBatsman = $(inning).find('.table.batsman tr');
+      let allBatsman = $(inning).find('.table.batsman tbody tr');
 
       // Looping into all the batsman rows
       allBatsman.each((i, batsman) => {
@@ -84,8 +84,8 @@ const matchStats = async (req, response) => {
 
         // check highest batsman run and assign details
         if (batsmanRuns > hrBatsmanRuns) {
-          hrBatsmanRuns = parseInt(batsmanRuns);
           hrBatsmanName = batsmanName;
+          hrBatsmanRuns = parseInt(batsmanRuns);
           hrBatsmanBalls = parseInt(batsmanBalls);
           hrBatsmanFours = parseInt(batsmanFours);
           hrBatsmanSixes = parseInt(batsmanSixes);
