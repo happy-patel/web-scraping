@@ -10,49 +10,50 @@ const matchStats = async (req, response) => {
       console.log(err);
     } else {
       const data = await extractHtml(html);
-      return response.status(200).json(data)
+      return response.status(200).json(data);
     }
   })
-
-  let teamNameArr = [];
-  let teamScoreArr = [];
-
+  
   const extractHtml = async (html) => {
-
+    
     // load HTMl into cheerio module
     let $ = cheerio.load(html);
-
-    // Get the particulat details from class attribute
-    let teamNames = $(".match-info.match-info-MATCH .team .name-detail");
-    let teamScores = $(".match-info.match-info-MATCH .team .score-detail .score");
+    
+    // Get the particular details from class attribute
     let venue = $(".match-venue").text();
     let match = $(".header-info .description").text().split(' ').slice(0, 2).join(' ');
-    let matchDetails = $(".card.content-block.match-scorecard-table>.table-responsive").find('tr')
+    let teamNames = $(".match-info.match-info-MATCH .team .name-detail");
+    let teamScores = $(".match-info.match-info-MATCH .team .score-detail .score");
+    let matchDetails = $(".card.content-block.match-scorecard-table>.table-responsive").find('tr');
     let playerOfMatch = $(".playerofthematch-player-detail").text().split(', ');
     let playerOfMatchScore = $(".playerofthematch-score-text").text();
     let matchResult = $(".match-info.match-info-MATCH .status-text").text();
     let innings = $(".card.content-block.match-scorecard-table>.Collapsible");
+    
+    let teamNameArr = [];
+    let teamScoreArr = [];
 
     // Get team names
     teamNames.each((i, name) => {
-      teamNameArr.push($(name).text())
+      teamNameArr.push($(name).text());
     })
-
-    // Get Match Date
-    const dateRow = $(matchDetails[6]).find('td');
-    const date = $(dateRow[1]).text().split('-')[0].trim()
-
-    // Get Toss
-    const tossRow = $(matchDetails[1]).find('td');
-    const toss = $(tossRow[1]).text().split('-')[0].trim()
-
-    // Get Team Name
-    const [team1Name, team2Name] = teamNameArr
 
     // Get Team Score
     teamScores.each((i, score) => {
       teamScoreArr.push($(score).text());
     })
+
+    // Get Match Date
+    const dateRow = $(matchDetails[6]).find('td');
+    const date = $(dateRow[1]).text().split('(')[0].trim();
+
+    // Get Toss
+    const tossRow = $(matchDetails[1]).find('td');
+    const toss = $(tossRow[1]).text().split('-')[0].trim();
+
+    // Get both Team Names and Scores
+    const [team1Name, team2Name] = teamNameArr;
+
     const [team1Score, team2Score] = teamScoreArr;
 
     // Get the Best Batting Score
@@ -122,11 +123,11 @@ const matchStats = async (req, response) => {
         // Find all the columns from particular bowler row
         let bowlerDetails = $(bowler).find('td');
 
-        let bowlerName = $(bowlerDetails[0]).text()
-        let bowlerOvers = $(bowlerDetails[1]).text()
-        let bowlerRuns = $(bowlerDetails[3]).text()
-        let bowlerWickets = $(bowlerDetails[4]).text()
-        let bowlerEcon = $(bowlerDetails[5]).text()
+        let bowlerName = $(bowlerDetails[0]).text();
+        let bowlerOvers = $(bowlerDetails[1]).text();
+        let bowlerRuns = $(bowlerDetails[3]).text();
+        let bowlerWickets = $(bowlerDetails[4]).text();
+        let bowlerEcon = $(bowlerDetails[5]).text();
 
         // Check highest wicket and assign using helper function
         if (bowlerWickets > hwBowlerWickets) {
@@ -183,4 +184,4 @@ const matchStats = async (req, response) => {
   }
 }
 
-module.exports = matchStats
+module.exports = matchStats;
